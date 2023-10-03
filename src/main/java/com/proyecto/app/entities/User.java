@@ -1,6 +1,10 @@
 package com.proyecto.app.entities;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -30,8 +34,7 @@ public class User implements Serializable {
 	private String city;
 	private Date dateOfBirth;
 	
-	public User(String name, String lastName, String email, int age, String cellphone, String role, String city,
-			Date dateOfBirth) {
+	public User(String name, String lastName, String email, int age, String cellphone, String role, String city) {
 		this.name = name;
 		this.lastName = lastName;
 		this.email = email;
@@ -39,7 +42,7 @@ public class User implements Serializable {
 		this.cellphone = cellphone;
 		this.role = role;
 		this.city = city;
-		this.dateOfBirth = dateOfBirth;
+		this.age = this.calculateAge();
 	}
 
 	public User() {
@@ -114,8 +117,18 @@ public class User implements Serializable {
 		this.dateOfBirth = dateOfBirth;
 	}
 	
+	public int calculateAge() {
+        LocalDate currentDate = LocalDate.now();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateOfBirth);
+        LocalDate birthDate = calendar.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        return Period.between(birthDate, currentDate).getYears();
+    }
+	
 	public UserDTO toDTO() {
-		UserDTO userDto = new UserDTO(id,name,lastName,age,cellphone,role);
+		UserDTO userDto = new UserDTO(id,name,lastName,age,cellphone,role,email);
 		return userDto;
 	}
 }

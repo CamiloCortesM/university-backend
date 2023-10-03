@@ -11,15 +11,17 @@ public class UserDTO implements Serializable  {
 	private String lastName;
 	private int age;
 	private String cellphone;
+	private String email;
 	private String role;
 	
-	public UserDTO(Long id, String name, String lastName, int age, String cellphone, String role) {
+	public UserDTO(Long id, String name, String lastName, int age, String cellphone, String role,String email) {
 		this.id = id;
 		this.name = name;
 		this.lastName = lastName;
 		this.age = age;
 		this.cellphone = cellphone;
 		this.role = role;
+		this.email = email;
 	}
 
 	public UserDTO() {
@@ -72,4 +74,13 @@ public class UserDTO implements Serializable  {
 	public void setRole(String role) {
 		this.role = role;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 }
