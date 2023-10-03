@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.proyecto.app.DTOs.UserDTO;
 import com.proyecto.app.entities.User;
 import com.proyecto.app.repositories.IARepositoryUser;
+
 
 @Service
 public class UserService {
@@ -37,6 +39,22 @@ public class UserService {
 		
 		return user.toDTO();
 	}
+	
+	public UserDTO getUserById (Long UserId) {
+		return RepositoryUser.getById(UserId).toDTO();
+	}
+	
+	public UserDTO deleteUserById(Long userId) {
+		Optional<User> userOptional = RepositoryUser.findById(userId);
+    	if (userOptional.isPresent()) {
+    		User userToDelete = userOptional.get();
+            RepositoryUser.deleteById(userId);
+            return userToDelete.toDTO();
+        } else {
+            throw new IllegalStateException("User with id " + userId + " not exists");
+        }
+	}
+	
 	
 	private int calculateAge(Date dateOfBirth) {
 		 if (dateOfBirth == null) {
@@ -80,6 +98,7 @@ public class UserService {
         }
 
     }
+
 	
 	
 
