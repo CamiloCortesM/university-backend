@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.proyecto.app.DTOs.UserDTO;
+
 @Entity
 @Table(name = "USER")
 public class User implements Serializable {
@@ -110,5 +112,10 @@ public class User implements Serializable {
 
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+	
+	public UserDTO toDTO() {
+		UserDTO userDto = new UserDTO(id,name,lastName,age,cellphone,role);
+		return userDto;
 	}
 }
