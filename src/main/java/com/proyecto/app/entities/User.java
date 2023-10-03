@@ -128,7 +128,7 @@ public class User implements Serializable {
     }
 	
 	public UserDTO toDTO() {
-		UserDTO userDto = new UserDTO(id,name,lastName,age,cellphone,role,email);
+		UserDTO userDto = new UserDTO(id,name,lastName,age,cellphone,role,email,city);
 		return userDto;
 	}
 }
