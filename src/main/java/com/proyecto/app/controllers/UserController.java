@@ -1,5 +1,7 @@
 package com.proyecto.app.controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,14 +29,20 @@ public class UserController {
         this.userService = userService;
     }
 	
-	@PostMapping
-	public UserDTO saveArtist(@RequestBody User user) {
-	    return userService.createUser(user);
+	@GetMapping("/all-users")
+	public List<UserDTO> getAllusers(){
+       return userService.listUsers();
 	}
+	
 	
 	@GetMapping(path = "{userId}")
 	public UserDTO getUserById(@PathVariable("userId") Long userId) {
 		return userService.getUserById(userId);
+	}
+	
+	@PostMapping
+	public UserDTO saveArtist(@RequestBody User user) {
+	    return userService.createUser(user);
 	}
 	
 	@DeleteMapping(path = "{userId}")
@@ -46,6 +54,5 @@ public class UserController {
 	public UserDTO updateUser(@PathVariable("userId") Long userId,@RequestBody User user) {
 		return userService.updateUser(userId, user);
 	}
-	
 
 }

@@ -26,6 +26,15 @@ public class UserService {
 	@Autowired
 	private IARepositoryUser RepositoryUser;
 	
+	public List<UserDTO> listUsers() {
+		//TODO: valid with JWT only admin
+    	List<User> users = RepositoryUser.findAll();
+    	
+    	List<UserDTO> usersDTOs = users.stream()
+                .map(User::toDTO) 
+                .collect(Collectors.toList());
+    	return usersDTOs;
+    }
 	
 	public UserDTO createUser(User user) {
 		//TODO: validate with JWT only admin
