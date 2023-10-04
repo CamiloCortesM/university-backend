@@ -126,20 +126,51 @@ public class UserService {
         return emailToCheck;
     }
 	
-	private void validateUser(User user,int age) {
-        if (user.getName() == null || user.getName().isEmpty() || user.getLastName() == null || user.getLastName().isEmpty()) {
-            throw new IllegalArgumentException("First and last name are required fields.");
-        }
-        String role = user.getRole();
-        if (role == null || !VALID_ROLES.contains(role.toLowerCase())) {
-            throw new IllegalArgumentException("Role must be 'student' or 'admin'.");
-        }
-       
-        if (age < 16) {
-            throw new IllegalArgumentException("The user must be at least 16 years old.");
-        }
+	private void validateUser(User user, int age) {
+	    validateName(user.getName(), user.getLastName());
+	    validateRole(user.getRole());
+	    validateNotNull(user.getCellphone(), "Cellphone is required");
+	    validateNotNull(user.getCity(), "City is required");
+	    validateCity(user.getCity());
+	    validatePhoneNumber(user.getCellphone());
+	    validateAge(age);
+	}
+	
+	private void validateName(String firstName, String lastName) {
+	    if (firstName == null || firstName.isEmpty() || lastName == null || lastName.isEmpty()) {
+	        throw new IllegalArgumentException("First and last name are required fields.");
+	    }
+	}
 
-    }
+	private void validateRole(String role) {
+	    if (role == null || !VALID_ROLES.contains(role.toLowerCase())) {
+	        throw new IllegalArgumentException("Role must be 'student' or 'admin'.");
+	    }
+	}
+
+	private void validateNotNull(Object field, String errorMessage) {
+	    if (field == null) {
+	        throw new IllegalArgumentException(errorMessage);
+	    }
+	}
+
+	private void validateAge(int age) {
+	    if (age < 16) {
+	        throw new IllegalArgumentException("The user must be at least 16 years old.");
+	    }
+	}
+	
+	private void validateCity(String city) {
+	    if (!city.matches("^[a-zA-Z\\s]+$")) {
+	        throw new IllegalArgumentException("City can only contain letters and spaces.");
+	    }
+	}
+
+	private void validatePhoneNumber(String phoneNumber) {
+	    if (!phoneNumber.matches("^[0-9]{10,}$")) {
+	        throw new IllegalArgumentException("Phone number must contain at least 10 digits and only digits.");
+	    }
+	}
 
 	
 	
