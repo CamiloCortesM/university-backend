@@ -52,10 +52,14 @@ public class UserService {
 		return user.toDTO();
 	}
 	
-	public UserDTO getUserById (Long UserId) {
-		//TODO: validate with JWT
-		return RepositoryUser.getById(UserId).toDTO();
-	}
+	public UserDTO getUserById(Long id) {
+        Optional<User> userOptional = RepositoryUser.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            return user.toDTO();
+        }
+        return null;
+ }
 	
 	public UserDTO deleteUserById(Long userId) {
 		 // TODO: Validar con JWT solo para administradores
