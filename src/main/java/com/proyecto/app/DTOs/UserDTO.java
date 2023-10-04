@@ -14,8 +14,9 @@ public class UserDTO implements Serializable  {
 	private String city;
 	private String email;
 	private String role;
+	private Boolean status;
 	
-	public UserDTO(Long id, String name, String lastName, int age, String cellphone, String role,String email,String city) {
+	public UserDTO(Long id, String name, String lastName, int age, String cellphone, String role,String email,String city,Boolean status) {
 		this.id = id;
 		this.name = name;
 		this.lastName = lastName;
@@ -92,6 +93,13 @@ public class UserDTO implements Serializable  {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	
+
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
 	
 }

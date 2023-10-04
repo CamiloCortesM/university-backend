@@ -58,15 +58,18 @@ public class UserService {
 	}
 	
 	public UserDTO deleteUserById(Long userId) {
-		// TODO: validate with JWT Only admin
-		Optional<User> userOptional = RepositoryUser.findById(userId);
-    	if (userOptional.isPresent()) {
-    		User userToDelete = userOptional.get();
-            RepositoryUser.deleteById(userId);
-            return userToDelete.toDTO();
-        } else {
-            throw new IllegalStateException("User with id " + userId + " not exists");
-        }
+		 // TODO: Validar con JWT solo para administradores
+	    Optional<User> userOptional = RepositoryUser.findById(userId);
+
+	    if (userOptional.isPresent()) {
+	        User userToDeactivate = userOptional.get();
+	        userToDeactivate.setStatus(false); 
+	        RepositoryUser.save(userToDeactivate);
+	        //TODO: Delete user of subject server
+	        return userToDeactivate.toDTO();
+	    } else {
+	        throw new IllegalStateException("User with id " + userId + " does not exist");
+	    }
 	}
 	
 	public UserDTO updateUser(Long userId, User user) {

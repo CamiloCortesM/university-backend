@@ -33,6 +33,7 @@ public class User implements Serializable {
 	private String role;
 	private String city;
 	private Date dateOfBirth;
+	private Boolean status;
 	
 	public User(String name, String lastName, String email, int age, String cellphone, String role, String city) {
 		this.name = name;
@@ -43,10 +44,11 @@ public class User implements Serializable {
 		this.role = role;
 		this.city = city;
 		this.age = this.calculateAge();
+		this.status = true;
 	}
 
 	public User() {
-		
+		this.status = true;
 	}
 
 	public Long getId() {
@@ -127,8 +129,16 @@ public class User implements Serializable {
         return Period.between(birthDate, currentDate).getYears();
     }
 	
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
+	}
+
 	public UserDTO toDTO() {
-		UserDTO userDto = new UserDTO(id,name,lastName,age,cellphone,role,email,city);
+		UserDTO userDto = new UserDTO(id,name,lastName,age,cellphone,role,email,city,status);
 		return userDto;
 	}
 }
