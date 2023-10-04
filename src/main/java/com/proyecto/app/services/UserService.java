@@ -5,14 +5,21 @@ import java.time.Period;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.proyecto.app.DTOs.UserDTO;
 import com.proyecto.app.entities.User;
@@ -25,6 +32,9 @@ public class UserService {
 
 	@Autowired
 	private IARepositoryUser RepositoryUser;
+	
+	@Autowired
+    private RestTemplate restTemplate;
 
 	public List<UserDTO> listUsers() {
     	List<User> users = RepositoryUser.findAll();
@@ -45,7 +55,7 @@ public class UserService {
         user.setStatus(true);
 
 		RepositoryUser.save(user);
-		//TODO: save in subjects backend
+		callSubjectsBackend(user);
 
 
 		return user.toDTO();
@@ -170,8 +180,28 @@ public class UserService {
 	        throw new IllegalArgumentException("Phone number must contain at least 10 digits and only digits.");
 	    }
 	}
+	
+	private void callSubjectsBackend(User user) {
+        String url = "http://20.121.50.176:8080/api/user/register";
 
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("id", user.getId());
+        requestBody.put("name", user.getName());
+        requestBody.put("email", user.getEmail());
+        requestBody.put("role", user.getRole());
+        requestBody.put("password", "123456"); 
+        
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
 
+        ResponseEntity<Void> response = restTemplate.postForEntity(url, requestEntity, Void.class);
 
+        if (response.getStatusCode().is2xxSuccessful()) {
+            System.out.println("User Created");
+        } else {
+            System.err.println("Error to user saved: " + response.getStatusCodeValue());
+        }
+    }
 
 }
