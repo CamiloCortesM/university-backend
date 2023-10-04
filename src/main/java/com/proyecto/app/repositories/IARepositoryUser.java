@@ -11,7 +11,8 @@ import com.proyecto.app.entities.User;
 public interface IARepositoryUser extends JpaRepository<User, Long> {
 
 	boolean existsByEmail(String emailToCheck);
-	
+
+	@Override
 	Optional<User> findById(Long id);
 
 }

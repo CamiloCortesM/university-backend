@@ -18,13 +18,13 @@ import com.proyecto.app.DTOs.UserDTO;
 @Entity
 @Table(name = "USER")
 public class User implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	private String name;
 	private String lastName;
 	private String email;
@@ -34,7 +34,7 @@ public class User implements Serializable {
 	private String city;
 	private Date dateOfBirth;
 	private Boolean status;
-	
+
 	public User(String name, String lastName, String email, int age, String cellphone, String role, String city) {
 		this.name = name;
 		this.lastName = lastName;
@@ -118,7 +118,7 @@ public class User implements Serializable {
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
 	}
-	
+
 	public int calculateAge() {
         LocalDate currentDate = LocalDate.now();
 
@@ -128,7 +128,7 @@ public class User implements Serializable {
 
         return Period.between(birthDate, currentDate).getYears();
     }
-	
+
 	public Boolean getStatus() {
 		return status;
 	}

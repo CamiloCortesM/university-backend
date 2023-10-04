@@ -20,38 +20,37 @@ import com.proyecto.app.repositories.IARepositoryUser;
 
 @Service
 public class UserService {
-	
+
 	private static final Set<String> VALID_ROLES = new HashSet<>(Arrays.asList("student", "admin"));
-	
+
 	@Autowired
 	private IARepositoryUser RepositoryUser;
-	
+
 	public List<UserDTO> listUsers() {
-		//TODO: valid with JWT only admin
     	List<User> users = RepositoryUser.findAll();
-    	
+
     	List<UserDTO> usersDTOs = users.stream()
-                .map(User::toDTO) 
+                .map(User::toDTO)
                 .collect(Collectors.toList());
     	return usersDTOs;
     }
-	
+
 	public UserDTO createUser(User user) {
-		//TODO: validate with JWT only admin
 		int age = calculateAge(user.getDateOfBirth());
         validateUser(user, age);
-        
+
 		String generatedEmail = generateUniqueEmail(user.getName(), user.getLastName());
         user.setEmail(generatedEmail);
         user.setAge(age);
-        
+        user.setStatus(true);
+
 		RepositoryUser.save(user);
 		//TODO: save in subjects backend
-		
-		
+
+
 		return user.toDTO();
 	}
-	
+
 	public UserDTO getUserById(Long id) {
         Optional<User> userOptional = RepositoryUser.findById(id);
         if (userOptional.isPresent()) {
@@ -60,24 +59,20 @@ public class UserService {
         }
         return null;
  }
-	
-	public UserDTO deleteUserById(Long userId) {
-		 // TODO: Validar con JWT solo para administradores
-	    Optional<User> userOptional = RepositoryUser.findById(userId);
 
+	public UserDTO deleteUserById(Long userId) {
+	    Optional<User> userOptional = RepositoryUser.findById(userId);
 	    if (userOptional.isPresent()) {
 	        User userToDeactivate = userOptional.get();
-	        userToDeactivate.setStatus(false); 
+	        userToDeactivate.setStatus(false);
 	        RepositoryUser.save(userToDeactivate);
-	        //TODO: Delete user of subject server
 	        return userToDeactivate.toDTO();
 	    } else {
 	        throw new IllegalStateException("User with id " + userId + " does not exist");
 	    }
 	}
-	
+
 	public UserDTO updateUser(Long userId, User user) {
-		// TODO: validate with JWT
 	    User userDb = RepositoryUser.findById(userId).orElseThrow(() -> new IllegalStateException(
 	            "User with this id not exists"
 	    ));
@@ -101,12 +96,12 @@ public class UserService {
 	    RepositoryUser.save(userDb);
 	    return userDb.toDTO();
 	}
-	
+
 	private int calculateAge(Date dateOfBirth) {
 		 if (dateOfBirth == null) {
 		     throw new IllegalArgumentException("Date of birth is required.");
 		 }
-		 
+
 		 try {
 		     LocalDate currentDate = LocalDate.now();
 		     LocalDate birthDate = dateOfBirth.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -115,7 +110,7 @@ public class UserService {
 		     throw new IllegalArgumentException("Invalid date format for date of birth.");
 		 }
     }
-	
+
 	private String generateUniqueEmail(String name, String lastName) {
         String baseEmail = name.toLowerCase() + "." + lastName.toLowerCase();
         String generatedEmail = baseEmail + "@uptc.edu.co";
@@ -129,7 +124,7 @@ public class UserService {
 
         return emailToCheck;
     }
-	
+
 	private void validateUser(User user, int age) {
 	    validateName(user.getName(), user.getLastName());
 	    validateRole(user.getRole());
@@ -139,7 +134,7 @@ public class UserService {
 	    validatePhoneNumber(user.getCellphone());
 	    validateAge(age);
 	}
-	
+
 	private void validateName(String firstName, String lastName) {
 	    if (firstName == null || firstName.isEmpty() || lastName == null || lastName.isEmpty()) {
 	        throw new IllegalArgumentException("First and last name are required fields.");
@@ -163,7 +158,7 @@ public class UserService {
 	        throw new IllegalArgumentException("The user must be at least 16 years old.");
 	    }
 	}
-	
+
 	private void validateCity(String city) {
 	    if (!city.matches("^[a-zA-Z\\s]+$")) {
 	        throw new IllegalArgumentException("City can only contain letters and spaces.");
@@ -176,7 +171,7 @@ public class UserService {
 	    }
 	}
 
-	
-	
+
+
 
 }

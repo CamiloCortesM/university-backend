@@ -21,35 +21,35 @@ import com.proyecto.app.services.UserService;
 @CrossOrigin
 @RequestMapping("/user")
 public class UserController {
-	
+
 	private final UserService userService;
-	
+
 	@Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
-	
+
 	@GetMapping("/all-users")
 	public List<UserDTO> getAllusers(){
        return userService.listUsers();
 	}
-	
-	
+
+
 	@GetMapping(path = "{userId}")
 	public UserDTO getUserById(@PathVariable("userId") Long userId) {
 		return userService.getUserById(userId);
 	}
-	
+
 	@PostMapping
 	public UserDTO saveArtist(@RequestBody User user) {
 	    return userService.createUser(user);
 	}
-	
+
 	@DeleteMapping(path = "{userId}")
 	public UserDTO deleteUserById(@PathVariable("userId") Long userId) {
 		return userService.deleteUserById(userId);
 	}
-	
+
 	@PutMapping(path = "{userId}")
 	public UserDTO updateUser(@PathVariable("userId") Long userId,@RequestBody User user) {
 		return userService.updateUser(userId, user);

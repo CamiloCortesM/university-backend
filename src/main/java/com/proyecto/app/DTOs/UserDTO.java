@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class UserDTO implements Serializable  {
 
 	private static final long serialVersionUID=1L;
-	
+
 	private Long id;
 	private String name;
 	private String lastName;
@@ -15,7 +15,7 @@ public class UserDTO implements Serializable  {
 	private String email;
 	private String role;
 	private Boolean status;
-	
+
 	public UserDTO(Long id, String name, String lastName, int age, String cellphone, String role,String email,String city,Boolean status) {
 		this.id = id;
 		this.name = name;
@@ -25,6 +25,7 @@ public class UserDTO implements Serializable  {
 		this.role = role;
 		this.email = email;
 		this.city = city;
+		this.status = status;
 	}
 
 	public UserDTO() {
@@ -101,5 +102,5 @@ public class UserDTO implements Serializable  {
 	public void setStatus(Boolean status) {
 		this.status = status;
 	}
-	
+
 }
